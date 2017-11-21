@@ -1,63 +1,44 @@
-import {
-	InitOptions,
-	DataTypes,
-	ModelAttributes,
-	Model,
-	UpdateOptions,
-	FindOptions,
-	Promise as Bluebird
-} from 'sequelize'
 
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import PassportMiddleware from "../middleware/passport";
 
-// Interfaces
-import DB from '../utils/db'
-
-// Logger
-import Logger from '../utils/logger'
-
-/**
- * Model Declaration
- */
 export interface UserInterface {
+	firstName: String
+	lastName: String
 	email: String
 	password: String
-	firstName?: string
-	lastName?: string
 }
 
-/**
- * Model Declaration
- */
-export default class User extends Model {
-	public id: number
-	public email: String
-	public password: String
-	public firstName: string
-	public lastName: string
+@Entity('users')
+export default class User extends BaseEntity {
 
-	public static register(userData: UserInterface): Bluebird<User> {
-		userData.password = User.generateHash(userData.password)
-		return User.create(userData)
+	@PrimaryGeneratedColumn()
+	id: number;
+
+	@Column({ nullable: true })
+	firstName: String;
+
+	@Column({ nullable: true })
+	lastName: String;
+
+	@Column()
+	email: String;
+
+	@Column()
+	password: String;
+
+	public register(password: String): Promise<User> {
+		this.password = User.generateHash(password)
+		return this.save()
 	}
 
 	public authenticate(password: String): Boolean {
 		return this.validPassword(password)
 	}
 
-	public static findByEmail(email: string): Bluebird<User | null> {
-		const options: FindOptions = { where: { 'email': email } }
-		return User.findOne(options)
-	}
-
-	public static updateById(id: number, values: Object): Bluebird<{}> {
-		const options: UpdateOptions = { where: { 'id': id }, returning: true }
-		return User.update(values, options).spread((number: number, users: User[]) => {
-			if (number === 0) {
-				return null
-			}
-			return users[0]
-		})
+	public static findByEmail(email: string): Promise<User | undefined> {
+		return User.findOne({ email: email })
 	}
 
 	//---------------------------
@@ -76,41 +57,3 @@ export default class User extends Model {
 		return bcrypt.compareSync(password, this.password);
 	};
 }
-
-/**
- * Model Schema
- */
-const userSchema: ModelAttributes = {
-	id: {
-		autoIncrement: true,
-		field: 'id',
-		primaryKey: true,
-		type: DataTypes.INTEGER
-	},
-	email: {
-		field: 'email',
-		type: DataTypes.STRING
-	},
-	password: {
-		field: 'password',
-		type: DataTypes.STRING
-	},
-	firstName: {
-		field: 'firstName',
-		type: DataTypes.STRING
-	},
-	lastName: {
-		field: 'lastName',
-		type: DataTypes.STRING
-	},
-}
-
-/**
- * Model Init Options
- */
-const opts: InitOptions = {
-	sequelize: DB.SharedInstance,
-	timestamps: true  // Will add a createdAt/updatedAt timestamp
-}
-
-User.init(userSchema, opts)

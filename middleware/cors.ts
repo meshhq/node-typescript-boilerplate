@@ -5,14 +5,8 @@ import * as cors from 'cors'
 // Catch 302s from oauth login path
 export default function (req: Request, res: Response, next: any) {
 	const baseURLWhitelist = [
-		'http://localhost:8888',
-		'https://github.com',
-		'http://dev.app.getstandup.com',
-		'https://app.getstandup.com',
-		'http://app.getstandup.com',
-		'https://api.getstandup.com',
-		'http://dev.api.getstandup.com',
-		'https://api.stripe.com'
+		'http://localhost:8080',
+		'http://localhost:3000',
 	]
 	const headerWhitelist = [
 		'Access-Control-Allow-Origin',
@@ -33,11 +27,7 @@ export default function (req: Request, res: Response, next: any) {
 		credentials: true,
 		exposedHeaders: headerWhitelist,
 		origin: (origin: any, callback: any) => {
-			if (!origin || baseURLWhitelist.indexOf(origin) !== -1) {
-				callback(null, true)
-			} else {
-				callback(new Error('Not allowed by CORS: ' + origin))
-			}
+			callback(null, true)
 		}
 	}
 

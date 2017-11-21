@@ -9,7 +9,7 @@
     "removeComments": true,
     "sourceMap": false,
     "target": "es6",
-    "outDir": "./distTest"
+	"outDir": "./distTest"
   },
   "exclude": [
     "node_modules",

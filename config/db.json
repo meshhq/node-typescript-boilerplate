@@ -2,21 +2,21 @@
 	"development": {
 		"username": "root",
 		"password": null,
-		"database": "commithub_dev",
+		"database": "mesh_dev",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	},
 	"test": {
 		"username": "root",
 		"password": null,
-		"database": "commithub_test",
+		"database": "mesh_test",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	},
 	"production": {
 		"username": "root",
 		"password": null,
-		"database": "commithub",
+		"database": "mesh_prod",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
 	}

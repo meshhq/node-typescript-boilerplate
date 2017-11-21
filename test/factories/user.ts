@@ -3,24 +3,23 @@ import * as Faker from 'faker'
 import User, { UserInterface } from '../../model/user'
 
 const userFactory = Factory.makeFactory<UserInterface>({
-	firstName: Factory.each((i) => Faker.lorem.words(4)),
-	lastName: Factory.each((i) => Faker.lorem.words(4)),
-	email: Factory.each((i) => Faker.lorem.words(4)),
-	password: Factory.each((i) => Faker.lorem.words(10))
+	firstName: Factory.each((i) => Faker.name.firstName(4)),
+	lastName: Factory.each((i) => Faker.name.firstName(4)),
+	email: Factory.each((i) => Faker.internet.email()),
+	password: Factory.each((i) => Faker.internet.password(10))
 })
 
-let newUser = () => {
+const newUser = () => {
 	return userFactory.build({})
 }
 
-let createUser = () => {
+const createUser = () => {
 	return User.create(newUser())
 }
 
-let registerUser = (password: String) => {
-	let user = newUser()
-	user.password = password
-	return User.register(user)
+const registerUser = (password: String) => {
+	let user = User.create(newUser())
+	return user.register(password)
 }
 
 export { newUser as NewUser }

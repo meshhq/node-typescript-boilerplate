@@ -2,13 +2,16 @@
 import * as express from 'express'
 
 // Config
-import Config from './middlewear/app'
+import Config from './middleware/app'
 
 // Logger
 import Logger from './utils/logger'
 
 // Routes
 import Router from './routes'
+
+// Needed for our ORM
+import "reflect-metadata";
 
 /**
  * Flagging app start and exit

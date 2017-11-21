@@ -11,8 +11,11 @@ import 'mocha'
 import server from '../server'
 const expect = chai.expect
 const app = server.bootstrap()
-import DB from '../utils/db'
 import User from '../model/user'
+import Redis from '../services/redis'
+
+// Factories
+import { NewUser, RegisterUser } from './factories/user'
 
 // Enable Chai HTTP
 chai.use(chaihttp)
@@ -20,21 +23,22 @@ chai.use(chaihttp)
 // Set ENVs
 dotenv.config({ silent: true })
 
-const userPass = Faker.internet.password()
-const userEmail = Faker.internet.email()
-
 export const Agent = chai.request.agent(app)
 export const UnAuthorizedAgent = chai.request.agent(app)
+
+const userPass = Faker.internet.password()
 export let LoggedInUser: User
 
-before(function () {
-	const dbClient = DB.SharedInstance
-	return dbClient.sync().then(function () {
-		return User.create({
-			firstName: 'test',
-			githubAccessToken: process.env.GITHUB_USER_AUTH_TOKEN,
-			githubHandle: 'test',
-			lastName: 'test',
-		})
-	})
+import { createConnection, Connection, UseContainerOptions } from "typeorm";
+import { connect } from 'tls';
+
+before(async function () {
+	const connection = await createConnection()
+	await connection.synchronize(true)
+	await Redis.flushRedis()
+
+	// Create a user and authenticate.
+	LoggedInUser = await RegisterUser(userPass)
+	const creds = { email: LoggedInUser.email, password: userPass }
+	await Agent.post('/login').send(creds)
 })
