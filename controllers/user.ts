@@ -32,7 +32,7 @@ export default class UserController {
 				throw new RequestError(404, `Failed to find user with email: ${email}`)
 			}
 			Logger.info(`Validating password for email: ${req.body.email}`)
-			let valid = user.authenticate(password)
+			const valid = user.authenticate(password)
 			if (!valid) {
 				throw new RequestError(401, `Failed to authenticate user with email: ${email}`)
 			}
@@ -80,7 +80,7 @@ export default class UserController {
 	 * @param req.params.user_id The userID for the user to be fetched.
 	 * @param res Express Response
 	 */
-	public static getUser(req: Request, res: Response) {
+	public static getUser (req: Request, res: Response) {
 		const valid = validator.ValidateRequest(req)
 		if (!valid) {
 			const err = new RequestError(422, `Failed to find user. Req parameters are invalid: ${req}`)
@@ -105,7 +105,7 @@ export default class UserController {
 	 * @param req.query The query values to be used in the query.
 	 * @param res Express Response
 	 */
-	public static getUsers(req: Request, res: Response) {
+	public static getUsers (req: Request, res: Response) {
 		const valid = validator.ValidateRequest(req)
 		if (!valid) {
 			const err = new RequestError(422, `Failed to find users. Req parameters are invalid: ${req}`)
@@ -131,7 +131,7 @@ export default class UserController {
 	 * @param req.body The paylod containg update information for the user.
 	 * @param res Express Response
 	 */
-	public static async updateUser(req: Request, res: Response) {
+	public static async updateUser (req: Request, res: Response) {
 		const valid = validator.ValidateRequest(req)
 		if (!valid) {
 			const err = new RequestError(422, `Failed to update user. Req parameters are invalid: ${req}`)
@@ -157,7 +157,7 @@ export default class UserController {
 	 * @param req.params.user_id The userID for the user to be deleted.
 	 * @param res Express Response
 	 */
-	public static async deleteUser(req: Request, res: Response) {
+	public static async deleteUser (req: Request, res: Response) {
 		const valid = validator.ValidateRequest(req)
 		if (!valid) {
 			const err = new RequestError(422, `Failed to delete organizations. Req parameters are invalid: ${req}`)
@@ -165,7 +165,7 @@ export default class UserController {
 		}
 
 		Logger.info(`Deleting user with ID ${req.params.user_id}`)
-		User.destroy({ where: { 'id': req.params.user_id } }).then((rows: number) => {
+		User.destroy({ where: { id: req.params.user_id } }).then((rows: number) => {
 			if (rows === 0) {
 				throw new RequestError(404, `Failed to delete user with id: ${req.params.user_id}. Not found`)
 			}
@@ -176,12 +176,12 @@ export default class UserController {
 		})
 	}
 
-	static buildUserInfo(body: any): UserInterface {
+	static buildUserInfo (body: any): UserInterface {
 		return {
-			"email": body.email,
-			"password": body.password,
-			"firstName": body.firstName,
-			"lastName": body.lastName
+			email: body.email,
+			password: body.password,
+			firstName: body.firstName,
+			lastName: body.lastName
 		}
 	}
 }

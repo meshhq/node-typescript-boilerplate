@@ -9,16 +9,16 @@ const userFactory = Factory.makeFactory<UserInterface>({
 	password: Factory.each((i) => Faker.lorem.words(10))
 })
 
-let newUser = () => {
+const newUser = () => {
 	return userFactory.build({})
 }
 
-let createUser = () => {
+const createUser = () => {
 	return User.create(newUser())
 }
 
-let registerUser = (password: String) => {
-	let user = newUser()
+const registerUser = (password: string) => {
+	const user = newUser()
 	user.password = password
 	return User.register(user)
 }

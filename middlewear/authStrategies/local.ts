@@ -24,10 +24,10 @@ class LocalAuthStrategy {
 		try {
 			UserController.authenticateUser(req, email, password, done)
 		} catch (err) {
-			console.log("err", err)
+			console.log('err', err)
 		}
 	}
 }
 
-const strategy = new LocalAuthStrategy
+const strategy = new LocalAuthStrategy()
 export default new LocalStrategy.Strategy(strategy.Options, strategy.authenticate)
