@@ -38,7 +38,7 @@ export default class UserController {
 			}
 			done(null, user)
 		}).catch((err: Error) => {
-			done(null, null)
+			done(err, null)
 		})
 	}
 

@@ -92,5 +92,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port
   debug('Listening on ' + bind)
-  console.log('⚡️⚡️  CommitHub Listening On: ' + bind)
+  console.log('⚡️⚡️  Mesh Listening On: ' + bind)
 }
