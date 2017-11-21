@@ -1,0 +1,43 @@
+{
+    "vsicons.presets.angular": false,
+
+    // Controls the rendering size of tabs in characters.
+    // If set to auto, the value will be guessed based on the opened file.
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+
+    // Controls if the editor will insert spaces for tabs.
+    // If set to auto, the value will be guessed based on the opened file.
+    "editor.cursorBlinking": "solid",
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    },
+    "[markdown]": {
+        "editor.formatOnSave": true,
+        "editor.renderWhitespace": "all",
+        "editor.acceptSuggestionOnEnter": false
+      },
+
+    // JSON
+    // Associate schemas to JSON files in the current project
+    "json.schemas": [],
+
+    // Enable/disable default JSON formatter (requires restart)
+    "json.format.enable": true,
+
+    // Traces the communication between VS Code and the JSON language server.
+    "json.trace.server": "off",
+
+    // TS Lint
+    "tslint.enable": true,
+    "tslint.configFile": "./tslint.json",
+    "tslint.exclude": ["./dist/*", "./module_modules/*"],
+    "files.autoSave": "off",
+    "tslint.autoFixOnSave": true,
+    "tslint.jsEnable": true,
+	"tslint.alwaysShowRuleFailuresAsWarnings": true,
+	"typescript.check.tscVersion": true,
+    "typescript.tsdk": "./node_modules/typescript/lib"
+  }
