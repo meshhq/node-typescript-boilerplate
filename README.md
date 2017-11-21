@@ -2,15 +2,39 @@
 
 This repository contains the source code for a React/Redux boilerplate application written in Typescript. 
 
-### Rationale
+## Rationale
 
 Setting up and configuring a new Node application built with modern frameworks demands a decent amount of time and cognitive overhead.
 
-The goal of this project is simple -- to provide developers with a pre-configured, standardized application starting point that allows them to start writing feature code immediately. 
+The goal of this project is simple: **to provide developers with a pre-configured, standardized application starting point that allows them to start writing feature code immediately.**
 
-This project will save developers time and headache when getting started with a new project. It will also provide them with a standardized project strucutre and configuration that can, and should, be used across all of their applications. 
+This project will save developers time and headache when getting started with a new project. It will also provide them with a standardized project strucutre and configuration that can be used across all of their applications.
 
-### Project Structure 
+## Getting Started
+
+To get started, clone the application to your local machine.
+
+```
+git clone git@meshhg/react-redux-boilerplate.git
+```
+
+Install the application dependencies. 
+
+```
+npm install
+```
+
+Once all dependecies are installed, the application can be run locally via the following
+
+```
+npm start
+```
+
+## Functionality
+
+This application intentionally contains minimal functionality, as it is meant to be a starting poing for a project. The only APIs this application exposes is user registration and login.
+
+## Project Structure 
 
 This project is built using the Mesh reccomended Typescript project structure. It is organized as detailed in the table below:
 
