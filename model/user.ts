@@ -20,8 +20,8 @@ import Logger from '../utils/logger'
  * Model Declaration
  */
 export interface UserInterface {
-	email: String
-	password: String
+	email: string
+	password: string
 	firstName?: string
 	lastName?: string
 }
@@ -30,51 +30,52 @@ export interface UserInterface {
  * Model Declaration
  */
 export default class User extends Model {
-	public id: number
-	public email: String
-	public password: String
-	public firstName: string
-	public lastName: string
 
-	public static register(userData: UserInterface): Bluebird<User> {
+	public static register (userData: UserInterface): Bluebird<User> {
 		userData.password = User.generateHash(userData.password)
 		return User.create(userData)
 	}
 
-	public authenticate(password: String): Boolean {
-		return this.validPassword(password)
-	}
-
-	public static findByEmail(email: string): Bluebird<User | null> {
-		const options: FindOptions = { where: { 'email': email } }
+	public static findByEmail (email: string): Bluebird<User | null> {
+		const options: FindOptions = { where: { email: email } }
 		return User.findOne(options)
 	}
 
-	public static updateById(id: number, values: Object): Bluebird<{}> {
-		const options: UpdateOptions = { where: { 'id': id }, returning: true }
-		return User.update(values, options).spread((number: number, users: User[]) => {
-			if (number === 0) {
+	public static updateById (id: number, values: object): Bluebird<{}> {
+		const options: UpdateOptions = { where: { id: id }, returning: true }
+		return User.update(values, options).spread((userNumber: number, users: User[]) => {
+			if (userNumber === 0) {
 				return null
 			}
 			return users[0]
 		})
 	}
 
-	//---------------------------
+	// ---------------------------
 	// Generates a password hash.
-	//---------------------------
+	// ---------------------------
 
-	public static generateHash = function (password: String): String {
-		return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
-	};
+	public static generateHash (password: string): string {
+		return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+	}
 
-	//-----------------------------------------------
+	public id: number
+	public email: string
+	public password: string
+	public firstName: string
+	public lastName: string
+
+	public authenticate (password: string): boolean {
+		return this.validPassword(password)
+	}
+
+	// -----------------------------------------------
 	// Validates a supplied password against our hash
-	//-----------------------------------------------
+	// -----------------------------------------------
 
-	public validPassword = function (password: String): Boolean {
+	public validPassword (password: string): boolean {
 		return bcrypt.compareSync(password, this.password);
-	};
+	}
 }
 
 /**
