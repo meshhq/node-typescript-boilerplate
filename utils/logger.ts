@@ -55,6 +55,15 @@ export default class Logger {
 		logger.info(`${logLine}: ${msg}`, ...meta, 'Trace: ', err.stack)
 	}
 
+	public static warn(msg: string, ...meta: any[]) {
+		if (process.env.LOGGER_DISABLED) {
+			return
+		}
+		const err: Error = new Error()
+		const logLine = Logger.reportLogLine(err)
+		logger.warn(`${logLine}: ${msg}`, ...meta)
+	}
+
 	public static error(msg: string, ...meta: any[]) {
 		if (process.env.LOGGER_DISABLED) {
 			return

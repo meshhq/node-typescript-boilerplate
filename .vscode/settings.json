@@ -39,5 +39,5 @@
     "tslint.jsEnable": true,
 	"tslint.alwaysShowRuleFailuresAsWarnings": true,
 	"typescript.check.tscVersion": true,
-    "typescript.tsdk": "./node_modules/typescript/lib"
-  }
+	"typescript.tsdk": "./node_modules/typescript/lib"
+}

@@ -5,11 +5,12 @@ import * as url from 'url'
 const connectionConfig: Options = {
 	dialect: 'postgres',
 	logging: false,
+	operatorsAliases: false,
 	pool: {
 		max: 5,
 		min: 0
 	},
-	protocol: 'tcp'
+	protocol: 'tcp',
 }
 
 export default class DBClient extends Sequelize {

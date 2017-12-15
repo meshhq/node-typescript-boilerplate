@@ -31,17 +31,17 @@ export interface UserInterface {
  */
 export default class User extends Model {
 
-	public static register (userData: UserInterface): Bluebird<User> {
+	public static register(userData: UserInterface): Bluebird<User> {
 		userData.password = User.generateHash(userData.password)
 		return User.create(userData)
 	}
 
-	public static findByEmail (email: string): Bluebird<User | null> {
+	public static findByEmail(email: string): Bluebird<User | null> {
 		const options: FindOptions = { where: { email: email } }
 		return User.findOne(options)
 	}
 
-	public static updateById (id: number, values: object): Bluebird<{}> {
+	public static updateById(id: number, values: object): Bluebird<User | null> {
 		const options: UpdateOptions = { where: { id: id }, returning: true }
 		return User.update(values, options).spread((userNumber: number, users: User[]) => {
 			if (userNumber === 0) {
@@ -55,7 +55,7 @@ export default class User extends Model {
 	// Generates a password hash.
 	// ---------------------------
 
-	public static generateHash (password: string): string {
+	public static generateHash(password: string): string {
 		return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
 	}
 
@@ -65,7 +65,7 @@ export default class User extends Model {
 	public firstName: string
 	public lastName: string
 
-	public authenticate (password: string): boolean {
+	public authenticate(password: string): boolean {
 		return this.validPassword(password)
 	}
 
@@ -73,8 +73,8 @@ export default class User extends Model {
 	// Validates a supplied password against our hash
 	// -----------------------------------------------
 
-	public validPassword (password: string): boolean {
-		return bcrypt.compareSync(password, this.password);
+	public validPassword(password: string): boolean {
+		return bcrypt.compareSync(password, this.password)
 	}
 }
 

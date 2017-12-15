@@ -21,6 +21,7 @@ Questions
 */
 describe('UserController', function () {
 	this.timeout(10000)
+	const testPassword = 'test-password'
 
 	let user: User
 
@@ -47,7 +48,6 @@ describe('UserController', function () {
 		})
 
 		it('should return 401 status for existing email', function (done) {
-			const testPassword = 'test-password'
 			RegisterUser(testPassword).then((registeredUser: User) => {
 				const userPayload = { email: user.email, password: testPassword }
 				Agent.post('/register').send(userPayload).end(function (err: Error, res) {
@@ -59,7 +59,7 @@ describe('UserController', function () {
 		})
 
 		it('should successfully return the created user payload', function (done) {
-			const creds = { email: 'test@test.com', password: 'test-password' }
+			const creds = { email: 'test@test.com', password: testPassword }
 			Agent.post('/register').send(creds).end(function (err: Error, res) {
 				expect(res).to.have.status(201)
 				done(err)
@@ -97,9 +97,8 @@ describe('UserController', function () {
 		})
 
 		it('should successfully authenticated a registered user', function (done) {
-			const testPassword = 'test-password'
 			RegisterUser(testPassword).then((registeredUser: User) => {
-				const userPayload = { email: user.email, password: testPassword }
+				const userPayload = { email: registeredUser.email, password: testPassword }
 				Agent.post('/login').send(userPayload).end(function (err: Error, res) {
 					expect(res).to.have.status(201)
 					done(err)

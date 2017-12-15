@@ -24,7 +24,8 @@ class LocalAuthStrategy {
 		try {
 			UserController.authenticateUser(req, email, password, done)
 		} catch (err) {
-			console.log('err', err)
+			Logger.error(`Error in the authenticate() method with user: ${email}`, err)
+			done(new Error('Internal server error'))
 		}
 	}
 }
