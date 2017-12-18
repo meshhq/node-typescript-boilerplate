@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: gulp
+    volumes:
+      - /usr/app/node_modules
+    ports:
+      - "8080:3000"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:9.6.2-alpine
