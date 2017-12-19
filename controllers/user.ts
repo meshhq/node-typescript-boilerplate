@@ -19,25 +19,23 @@ export default class UserController {
 	/**
 	 * Authenticates a user.
 	 * @param req Express Request
-	 * @param req.body The payload containing user information.
-	 * @param req.body.email The email address for the user.
-	 * @param req.body.password The password address for the user.
-	 * @param res Express Response
+	 * @param email The email for the user attempting to authenticate.
+	 * @param password The password for the user attempting to authenticate.
+	 * @param dones
 	 */
 	public static authenticateUser = (req: Request, email: string, password: string, done: Function) => {
 		// Check for a user with the supplied email.
 		Logger.info(`Checking for existing user with email: ${email}`)
 		User.findByEmail(email).then((user: User) => {
 			if (!user) {
-				Logger.warn(`authenticateUser() - User not found for email: ${email}`)
-				return done(null, false)
+				Logger.info(`Failed to find user with email: ${email}`)
+				return done()
 			}
-
 			Logger.info(`Validating password for email: ${req.body.email}`)
-			const valid = user.authenticate(password)
+			let valid = user.authenticate(password)
 			if (!valid) {
-				Logger.warn(`authenticateUser() - Invalid password for user: ${email}`)
-				return done(null, false)
+				Logger.info(`Failed to authenticate user with email: ${email}`)
+				return done()
 			}
 			done(null, user)
 		}).catch((err: Error) => {
@@ -69,8 +67,8 @@ export default class UserController {
 				throw new RequestError(401, `Conflict. User with email: ${req.params.user_id} already exists.`)
 			}
 			Logger.info(`Creating new user with email: ${req.body.email}`)
-			const userInfo = UserController.buildUserInfo(req.body)
-			return User.register(userInfo)
+			const newUser = UserController.buildUser(req.body)
+			return newUser.register(req.body.password)
 		}).then((newUser: User) => {
 			// Next to pass down the express chain
 			next()
@@ -93,7 +91,7 @@ export default class UserController {
 		}
 
 		Logger.info(`Fetching user with id: ${req.params.user_id}`)
-		User.findById(req.params.user_id).then((user: User) => {
+		User.findOneById(req.params.user_id).then((user: User) => {
 			if (!user) {
 				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id}`)
 			}
@@ -118,7 +116,7 @@ export default class UserController {
 		}
 
 		Logger.info('Find all Users for User: ', req.user.githubHandle)
-		User.findAll({ where: req.query }).then((users: User[]) => {
+		User.find({ where: req.query }).then((users: User[]) => {
 			if (users.length === 0) {
 				throw new RequestError(404, `Failed to find users for query: ${req.query}`)
 			}
@@ -132,25 +130,29 @@ export default class UserController {
 	/**
 	 * Updates an User with the supplied information.
 	 * @param req Express Request
-	 * @param req.params.user_id The user)D for the user to be updated.
+	 * @param req.params.user_id The userID for the user to be updated.
 	 * @param req.body The paylod containg update information for the user.
 	 * @param res Express Response
 	 */
 	public static async updateUser(req: Request, res: Response) {
-		const valid = validator.ValidateRequest(req)
+		const valid = req.params.user_id && validator.ValidateRequest(req)
 		if (!valid) {
 			const err = new RequestError(422, `Failed to update user. Req parameters are invalid: ${req}`)
 			return RequestError.handle(err, req, res)
 		}
 
-		Logger.info(`Updating user with ID ${req.params.user_id}`)
-		User.updateById(req.params.user_id, req.body).then((user: User) => {
+		Logger.info(`Fetching user with id: ${req.params.user_id}`)
+		User.findOneById(req.params.user_id).then((user: User) => {
 			if (!user) {
-				throw new RequestError(404, `Failed to find user for query: ${req.query}`)
+				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id}`)
 			}
-			Logger.info(`Updated User ${user}`)
-			res.status(200).json(user)
+			Logger.info(`Updating user with ID ${req.params.user_id}`)
+			User.updateById(req.params.user_id, req.body)
+		}).then(() => {
+			Logger.info(`Updated User with ID ${req.params.user_id}`)
+			res.status(200).json()
 		}).catch((err: Error | RequestError) => {
+			Logger.error("Failed updating user.")
 			RequestError.handle(err, req, res)
 		})
 	}
@@ -162,30 +164,33 @@ export default class UserController {
 	 * @param res Express Response
 	 */
 	public static async deleteUser(req: Request, res: Response) {
-		const valid = validator.ValidateRequest(req)
+		const valid = req.params.user_id
 		if (!valid) {
-			const err = new RequestError(422, `Failed to delete organizations. Req parameters are invalid: ${req}`)
+			const err = new RequestError(422, `Failed to delete organizations.Req parameters are invalid: ${req}`)
 			return RequestError.handle(err, req, res)
 		}
 
-		Logger.info(`Deleting user with ID ${req.params.user_id}`)
-		User.destroy({ where: { id: req.params.user_id } }).then((rows: number) => {
-			if (rows === 0) {
-				throw new RequestError(404, `Failed to delete user with id: ${req.params.user_id}. Not found`)
+		Logger.info(`Fetching user with id: ${req.params.user_id}`)
+		User.findOneById(req.params.user_id).then((user: User) => {
+			if (!user) {
+				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id}`)
 			}
-			Logger.info(`Deleted user with ID: ${req.params.user_id}`)
+			Logger.info(`Deleting user with ID ${req.params.user_id} `)
+			User.removeById(req.params.user_id)
+		}).then(() => {
+			Logger.info(`Deleted user with ID: ${req.params.user_id} `)
 			res.status(200).json()
 		}).catch((err: Error) => {
+			Logger.error("Failed deleting user.")
 			RequestError.handle(err, req, res)
 		})
 	}
 
-	public static buildUserInfo(body: any): UserInterface {
-		return {
-			email: body.email,
-			password: body.password,
-			firstName: body.firstName,
-			lastName: body.lastName
-		}
+	static buildUser(body: any): User {
+		let user = User.create()
+		user.email = body.email
+		user.firstName = body.firstName
+		user.lastName = body.lastName
+		return user
 	}
 }

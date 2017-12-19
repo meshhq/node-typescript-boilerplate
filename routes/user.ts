@@ -5,18 +5,21 @@ import * as passport from 'passport'
 // Controller
 import UserController from '../controllers/user'
 
-export default function createUserRoutes (router: Router) {
+// Middleware
+import PassportMiddleware from '../middlewear/passport'
 
-	router.post('/register', UserController.registerUser, passport.authenticate('local'), (req, res) => {
-		res.status(201).send()
-	})
+export default function createUserRoutes(router: Router) {
 
-	router.post('/login', passport.authenticate('local'), (req, res) => {
-		res.status(201).send()
-	})
+	router.post('/register', UserController.registerUser, passport.authenticate('local'), function (req, res) {
+		res.status(201).send();
+	});
 
-	router.get('/users', UserController.getUsers)
-	router.get('/users/:user_id', UserController.getUser)
-	router.put('/users/:user_id', UserController.updateUser)
-	router.delete('/users/:user_id', UserController.deleteUser)
+	router.post('/login', passport.authenticate('local'), function (req, res) {
+		res.status(201).send();
+	});
+
+	router.get('/users', PassportMiddleware.ensureAuthenticated, UserController.getUsers)
+	router.get('/users/:user_id', PassportMiddleware.ensureAuthenticated, UserController.getUser)
+	router.put('/users/:user_id', PassportMiddleware.ensureAuthenticated, UserController.updateUser)
+	router.delete('/users/:user_id', PassportMiddleware.ensureAuthenticated, UserController.deleteUser)
 }

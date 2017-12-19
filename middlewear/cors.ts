@@ -5,14 +5,7 @@ import * as cors from 'cors'
 // Catch 302s from oauth login path
 export default function (req: Request, res: Response, next: any) {
 	const baseURLWhitelist = [
-		'http://localhost:8888',
-		'https://github.com',
-		'http://dev.app.getstandup.com',
-		'https://app.getstandup.com',
-		'http://app.getstandup.com',
-		'https://api.getstandup.com',
-		'http://dev.api.getstandup.com',
-		'https://api.stripe.com'
+		'http://localhost:8080',
 	]
 	const headerWhitelist = [
 		'Access-Control-Allow-Origin',

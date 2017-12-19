@@ -10,6 +10,9 @@ import Logger from './utils/logger'
 // Routes
 import Router from './routes'
 
+// Needed for our ORM
+import "reflect-metadata";
+
 /**
  * Flagging app start and exit
  */

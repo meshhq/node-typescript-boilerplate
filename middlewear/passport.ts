@@ -25,7 +25,9 @@ export default class PassportMiddleware {
 		})
 
 		Passport.deserializeUser((id: number, done: PassportDeserializeUserCB<User, number>) => {
-			User.findById(id).then((user: User) => { return done(null, user) })
+			User.findOneById(id).then((user: User) => {
+				return done(null, user)
+			})
 		})
 	}
 
@@ -42,10 +44,8 @@ export default class PassportMiddleware {
 	/**
 	 * Overrides to allow for extension
 	 */
-	public static initialize (): Express.Handler {
-		const handler = Passport.initialize()
-		PassportMiddleware.MountStrategies()
-		PassportMiddleware.SetupUserSerializations()
+	public static initialize(): Express.Handler {
+		let handler = Passport.initialize()
 		return handler
 	}
 
