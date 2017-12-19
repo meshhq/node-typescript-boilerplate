@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
-      - image: circleci/mongo:3.4.4
+      - image: postgres:9.5
 
     working_directory: ~/repo
 
