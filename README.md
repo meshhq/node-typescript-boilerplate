@@ -1,5 +1,7 @@
 # Mesh Node Express Boilerplate
 
+[![CircleCI](https://circleci.com/gh/meshhq/node-typescript-boilerplate/tree/master.svg?style=svg&circle-token=15f15775c51f602d6fc70b9dda1ca8a40336833c)](https://circleci.com/gh/meshhq/node-typescript-boilerplate/tree/master)
+
 This repository contains the source code for a `Node` `Express` boilerplate application written in `TypeScript`. 
 
 ## Rationale
