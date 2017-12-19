@@ -1,6 +1,5 @@
 // External Dependencies
 import { Request, Response } from 'express'
-import { Promise as Bluebird } from 'sequelize'
 
 // Models
 import User, { UserInterface } from '../model/user'

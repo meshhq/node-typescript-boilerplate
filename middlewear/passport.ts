@@ -15,11 +15,11 @@ export default class PassportMiddleware {
 	/**
 	 * Mount Passport Strategies
 	 */
-	public static MountStrategies () {
+	public static MountStrategies() {
 		Passport.use('local', LocalAuthStrategy)
 	}
 
-	public static SetupUserSerializations () {
+	public static SetupUserSerializations() {
 		Passport.serializeUser((user: User, done: PassportSerializeUserCB<User, number>) => {
 			done(null, user.id)
 		})
@@ -34,7 +34,7 @@ export default class PassportMiddleware {
 	/**
 	 * Authorization Helper
 	 */
-	public static ensureAuthenticated (req: Express.Request, res: Express.Response, next: any): void {
+	public static ensureAuthenticated(req: Express.Request, res: Express.Response, next: any): void {
 		if (req.isAuthenticated()) {
 			return next()
 		}
@@ -49,15 +49,15 @@ export default class PassportMiddleware {
 		return handler
 	}
 
-	public static session (): Express.Handler {
+	public static session(): Express.Handler {
 		return Passport.session()
 	}
 
-	public static use (strategy: Passport.Strategy): Passport.Passport {
+	public static use(strategy: Passport.Strategy): Passport.Passport {
 		return Passport.use(strategy)
 	}
 
-	public static useWithStrategy (name: string, strategy: Passport.Strategy): Passport.Passport {
+	public static useWithStrategy(name: string, strategy: Passport.Strategy): Passport.Passport {
 		return Passport.use(name, strategy)
 	}
 }

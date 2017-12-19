@@ -1,9 +1,7 @@
 // External Dependencies
-import { Promise as Bluebird } from 'sequelize'
 import * as redis from 'redis'
 import { Callback as RedCB } from 'redis'
 import * as Redlock from 'redlock'
-import { Promise } from 'sequelize'
 
 // Types
 export type transactionParam = (client: redis.Multi) => void
@@ -45,8 +43,8 @@ export default class Redis {
 	 * @param keyName Name of the key.
 	 * @param value String value to be stored at key.
 	 */
-	public static setValueForKey(keyName: string, value: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static setValueForKey(keyName: string, value: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().set(keyName, value, (err: Error, res: string) => {
 				if (err) {
 					return reject(err)
@@ -62,8 +60,8 @@ export default class Redis {
  	* @param keyName Name of the key.
  	* @param value String value to be stored at key.
  	*/
-	public static setValueForKeyIfNoneExists(keyName: string, value: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static setValueForKeyIfNoneExists(keyName: string, value: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().setnx(keyName, value, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -77,8 +75,8 @@ export default class Redis {
 	 * Removes the value for a given key in Redis
 	 * @param key The key for te value to be removed
 	 */
-	public static removeValueForKey(key: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static removeValueForKey(key: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().del(key, (err: Error) => {
 				if (err) {
 					return reject(false)
@@ -94,8 +92,8 @@ export default class Redis {
 	 * @param keyName Name of the key.
 	 * @param value String value to be stored at key.
 	 */
-	public static keys(keyNamePattern: string): Bluebird<string[]> {
-		return new Bluebird<string[]>((resolve: (success: string[]) => void, reject: (err: Error) => void) => {
+	public static keys(keyNamePattern: string): Promise<string[]> {
+		return new Promise<string[]>((resolve: (success: string[]) => void, reject: (err: Error) => void) => {
 			Redis.SharedInstance().keys(keyNamePattern, (err: Error, res: string[]) => {
 				if (err) {
 					return reject(err)
@@ -112,8 +110,8 @@ export default class Redis {
 	 * @param value Value to be stored at key.
 	 * @param expiration Time in seconds for the key to expire.
 	 */
-	public static setValueForKeyWithExpiration(keyName: string, value: string, expiration: number): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err: Error) => void) => {
+	public static setValueForKeyWithExpiration(keyName: string, value: string, expiration: number): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err: Error) => void) => {
 			Redis.SharedInstance().setex(keyName, expiration, value, (err: Error, res: string) => {
 				if (err) {
 					return reject(err)
@@ -127,8 +125,8 @@ export default class Redis {
 	 * Fetches the value at a given key.
 	 * @param keyName Name of the key storing the value.
 	 */
-	public static valueForKey(keyName: string): Bluebird<string> {
-		return new Bluebird<string>((resolve: (success: string) => void, reject: (err: Error) => void) => {
+	public static valueForKey(keyName: string): Promise<string> {
+		return new Promise<string>((resolve: (success: string) => void, reject: (err: Error) => void) => {
 			Redis.SharedInstance().get(keyName, (err: Error, res: string) => {
 				if (err) {
 					return reject(err)
@@ -147,8 +145,8 @@ export default class Redis {
 	 * @param key The name of the key to store in hash.
 	 * @param value The value to be stored at the key.
 	 */
-	public static pushToHashSet(hashSetName: string, key: string, value: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err: Error) => void) => {
+	public static pushToHashSet(hashSetName: string, key: string, value: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err: Error) => void) => {
 			Redis.SharedInstance().hset(hashSetName, key, value, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -165,8 +163,8 @@ export default class Redis {
 	 *
 	 * @param hashSetName Name of the hash set.
 	 */
-	public static valuesForHashSet(hashSetName: string): Bluebird<any> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static valuesForHashSet(hashSetName: string): Promise<any> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().hgetall(hashSetName, (err: Error, res: any) => {
 				if (err) {
 					return reject(err)
@@ -183,9 +181,9 @@ export default class Redis {
 	 * @param key Key of the list
 	 * @param (optional) Mutli client for transactions
 	 */
-	public static lengthOfListWithKey(listKey: string): Bluebird<number> {
+	public static lengthOfListWithKey(listKey: string): Promise<number> {
 		const client: RedisClient = Redis.SharedInstance()
-		return new Bluebird<number>((resolve: (success: number) => void, reject: (err?: any) => void) => {
+		return new Promise<number>((resolve: (success: number) => void, reject: (err?: any) => void) => {
 			client.llen(listKey, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -201,8 +199,8 @@ export default class Redis {
 	 * @param keyName Name of the key.
 	 * @param (optional) Mutli client for transactions
 	 */
-	public static keyExists(keyName: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static keyExists(keyName: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().exists(keyName, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -219,8 +217,8 @@ export default class Redis {
 	 * @param listName The name of the list to push to.
 	 * @param value The value/values to insert into the list.
 	 */
-	public static pushToOrCreateList(listName: string, value: string): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static pushToOrCreateList(listName: string, value: string): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().rpush(listName, value, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -238,8 +236,8 @@ export default class Redis {
 	 * @param listName Name of the list.
 	 * @param value Value to push to the end of the list.
 	 */
-	public static pushToExistingList(listName: string, value: string): Bluebird<number> {
-		return new Bluebird<number>((resolve: (success: number) => void, reject: (err?: any) => void) => {
+	public static pushToExistingList(listName: string, value: string): Promise<number> {
+		return new Promise<number>((resolve: (success: number) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().rpushx(listName, value, (err: Error, res: number) => {
 				if (err) {
 					return reject(err)
@@ -259,8 +257,8 @@ export default class Redis {
 	 * @param offsetOne The first offest specifing where to start returning elements.
 	 * @param offsetTwo The second offset specifing where to stop retuning elements.
 	 */
-	public static arrayValues(keyName: string, offsetOne: number, offsetTwo: number): Bluebird<any> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static arrayValues(keyName: string, offsetOne: number, offsetTwo: number): Promise<any> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			Redis.SharedInstance().lrange(keyName, offsetOne, offsetTwo, (err: Error, res: any) => {
 				if (err) {
 					return reject(err)
@@ -275,10 +273,10 @@ export default class Redis {
 	 * @param keyName Name of the key that will expire.
 	 * @param milliseconds Expiration time for key in milliseconds.
 	 */
-	public static setKeyTimeout(keyName: string, milliseconds: number): Bluebird<boolean> {
+	public static setKeyTimeout(keyName: string, milliseconds: number): Promise<boolean> {
 		const timeStamp = String(milliseconds)
 		const cmd = `PEXPIRE`
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			const client = Redis.SharedInstance() as redis.RedisClient
 			client.send_command(cmd, [keyName, timeStamp], (err: Error, res: number) => {
 				if (err) {
@@ -293,8 +291,8 @@ export default class Redis {
 	 * Destroys redis.
 	 * NOTE: Should never be called during non-test env
 	 */
-	public static flushRedis(): Bluebird<boolean> {
-		return new Bluebird<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
+	public static flushRedis(): Promise<boolean> {
+		return new Promise<boolean>((resolve: (success: boolean) => void, reject: (err?: any) => void) => {
 			const client = Redis.SharedInstance() as redis.RedisClient
 			client.flushall((err: Error, res: string) => {
 				if (err) {

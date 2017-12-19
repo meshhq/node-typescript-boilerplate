@@ -1,7 +1,6 @@
 
 import * as Express from 'express'
 import * as LocalStrategy from 'passport-local'
-import { FindOptions } from 'sequelize'
 
 // Model
 import User from '../../model/user'

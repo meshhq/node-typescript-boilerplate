@@ -15,9 +15,6 @@ import { NewUser, CreateUser, RegisterUser } from '../factories/user'
 
 describe('UserController', function () {
 	this.timeout(10000)
-	before(function () {
-		return User.clear()
-	})
 
 	//------------------------------------------------------------------------
 	// User Route Tests

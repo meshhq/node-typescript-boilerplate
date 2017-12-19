@@ -30,15 +30,15 @@ const userPass = Faker.internet.password()
 export let LoggedInUser: User
 
 import { createConnection, Connection, UseContainerOptions } from "typeorm";
+import { connect } from 'tls';
 
 before(async function () {
-	await createConnection()
+	const connection = await createConnection()
+	await connection.synchronize(true)
 	await Redis.flushRedis()
 
 	// Create a user and authenticate.
 	LoggedInUser = await RegisterUser(userPass)
 	const creds = { email: LoggedInUser.email, password: userPass }
-	await Agent.post('/login').send(creds).end(function (err: Error, res) {
-		expect(res).to.have.status(201)
-	})
+	await Agent.post('/login').send(creds)
 })
