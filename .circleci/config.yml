@@ -9,7 +9,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:7.10
       - image: postgres:9.5
-      - image: bitnami/redis:latest
+      - image: redis
 
     working_directory: ~/repo
 
