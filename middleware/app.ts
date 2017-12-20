@@ -26,9 +26,13 @@ export default class MeshConfig {
 	public static async configureApplication(app: Express) {
 
 		// Connect to the database.
-		createConnection().then((connection: Connection) => {
-			connection.synchronize()
-		})
+		console.log("TEST", process.env.NODE_ENV)
+		if (process.env.NODE_ENV !== "test") {
+			createConnection().then((connection: Connection) => {
+				connection.synchronize()
+			})
+		}
+
 
 		// Ensure ENVs Set
 		DotENV.config()
