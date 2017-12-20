@@ -9,15 +9,15 @@ const userFactory = Factory.makeFactory<UserInterface>({
 	password: Factory.each((i) => Faker.internet.password(10))
 })
 
-let newUser = () => {
+const newUser = () => {
 	return userFactory.build({})
 }
 
-let createUser = () => {
+const createUser = () => {
 	return User.create(newUser())
 }
 
-let registerUser = (password: String) => {
+const registerUser = (password: String) => {
 	let user = User.create(newUser())
 	return user.register(password)
 }

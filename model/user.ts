@@ -1,7 +1,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import * as bcrypt from 'bcrypt'
-import PassportMiddleware from "../middlewear/passport";
+import PassportMiddleware from "../middleware/passport";
 
 export interface UserInterface {
 	firstName: String

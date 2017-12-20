@@ -2,7 +2,7 @@
 import * as express from 'express'
 
 // Config
-import Config from './middlewear/app'
+import Config from './middleware/app'
 
 // Logger
 import Logger from './utils/logger'

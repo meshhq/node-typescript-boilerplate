@@ -33,7 +33,7 @@ describe('UserController', function () {
 		it('should return 401 status for existing email', function (done) {
 			const testPassword = "test-password"
 			RegisterUser(testPassword).then((user: User) => {
-				const userPayload = { "email": user.email, "password": testPassword }
+				const userPayload = { email: user.email, password: testPassword }
 				Agent.post('/register').send(userPayload).end(function (err: Error, res) {
 					expect(err).to.exist
 					expect(res).to.have.status(401)
@@ -53,7 +53,7 @@ describe('UserController', function () {
 
 	describe('POST /login', function () {
 		it('should return 400 status for invalid payload', function (done) {
-			const badPayload = { "badParam": "test" }
+			const badPayload = { badParam: "test" }
 			Agent.post('/login').send(badPayload).end(function (err: Error, res) {
 				expect(err).to.exist
 				expect(res).to.have.status(400)
@@ -130,7 +130,7 @@ describe('UserController', function () {
 		})
 
 		it('should return 404 status for not found user', function (done) {
-			let payload = { firstName: 'New Name' }
+			const payload = { firstName: 'New Name' }
 			Agent.put(`/users/555`).send(payload).end(function (err: Error, res) {
 				expect(err).to.exist
 				expect(res).to.have.status(404)
@@ -139,7 +139,7 @@ describe('UserController', function () {
 		})
 
 		it('should return the user.', function (done) {
-			let payload = { firstName: 'New Name' }
+			const payload = { firstName: 'New Name' }
 			Agent.put(`/users/${LoggedInUser.id}`).send(payload).end(function (err: Error, res) {
 				expect(res).to.have.status(200)
 				done(err)

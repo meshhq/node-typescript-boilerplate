@@ -6,7 +6,7 @@ import * as passport from 'passport'
 import UserController from '../controllers/user'
 
 // Middleware
-import PassportMiddleware from '../middlewear/passport'
+import PassportMiddleware from '../middleware/passport'
 
 export default function createUserRoutes(router: Router) {
 

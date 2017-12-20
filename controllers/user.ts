@@ -31,7 +31,7 @@ export default class UserController {
 				return done()
 			}
 			Logger.info(`Validating password for email: ${req.body.email}`)
-			let valid = user.authenticate(password)
+			const valid = user.authenticate(password)
 			if (!valid) {
 				Logger.info(`Failed to authenticate user with email: ${email}`)
 				return done()
