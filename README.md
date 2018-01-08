@@ -1,4 +1,4 @@
-# Mesh Node Express Boilerplate
+# Mesh Node TypeScript Boilerplate
 
 [![CircleCI](https://circleci.com/gh/meshhq/node-typescript-boilerplate/tree/master.svg?style=svg&circle-token=15f15775c51f602d6fc70b9dda1ca8a40336833c)](https://circleci.com/gh/meshhq/node-typescript-boilerplate/tree/master)
 
