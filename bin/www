@@ -4,7 +4,7 @@
 // Load ENVs
 const dotENV = require('dotenv').config()
 
-//module dependencies
+// module dependencies
 const server = require('../dist/server')
 const debug = require('debug')('express:server')
 const http = require('http')
@@ -28,7 +28,7 @@ httpServer.on('listening', onListening)
 
 /**
  * Normalize a port into a number, string, or false.
- * 
+ *
  * @param val The port value to use
  */
 function normalizePort(val) {
@@ -49,7 +49,7 @@ function normalizePort(val) {
 
 /**
  * Event listener for HTTP server "error" event.
- * 
+ *
  * @param error The error that triggered this
  */
 function onError(error) {
@@ -57,7 +57,7 @@ function onError(error) {
     throw error
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port
 
