@@ -7,6 +7,11 @@ import Organization from '../model/organization'
 // Logger
 import Logger from '../utils/logger'
 import RequestError from '../utils/error'
+import Validator from '../utils/validator'
+
+// Acceptable Body Params
+const bodyParams = ['name', 'firstName', 'lastName']
+const validator = new Validator(bodyParams)
 
 export default class OrganizationController {
 
@@ -28,9 +33,9 @@ export default class OrganizationController {
 		Logger.info(`Checking for existing organization with name: ${name}`)
 		Organization.findByName(name).then((organization: Organization) => {
 			if (organization) {
-				throw new RequestError(401, `Conflict. Organization with email: ${req.params.organization_id} already exists.`)
+				throw new RequestError(401, `Conflict. Organization with name: ${name} already exists.`)
 			}
-			Logger.info(`Creating new organization with email: ${req.body.email}`)
+			Logger.info(`Creating new organization with name: ${req.body.name}`)
 			const newOrganization = OrganizationController.buildOrganization(req.body)
 			return newOrganization.save()
 		}).then((organization: Organization) => {
@@ -42,7 +47,7 @@ export default class OrganizationController {
 	}
 
 	// /**
-	//  * Gets all Organization for a organization constrained by the supplied query parameters.
+	//  * Gets all Organizations for a organization constrained by the supplied query parameters.
 	//  * @param req Express Request
 	//  * @param req.query The query values to be used in the query.
 	//  * @param res Express Response
@@ -121,34 +126,34 @@ export default class OrganizationController {
 	// 	})
 	// }
 
-	// /**
-	//  * Get a single Organization the authorized organization belongs to
-	//  * @param req Express Request - will contain the Authorized Organization info
-	//  * @param req.params.organization_id The organizationID for the organization to be deleted.
-	//  * @param res Express Response
-	//  */
-	// public static async deleteOrganization(req: Request, res: Response) {
-	// 	const valid = req.params.organization_id
-	// 	if (!valid) {
-	// 		const err = new RequestError(422, `Failed to delete organizations.Req parameters are invalid: ${req}`)
-	// 		return RequestError.handle(err, req, res)
-	// 	}
+	/**
+	 * Get a single Organization the authorized organization belongs to
+	 * @param req Express Request - will contain the Authorized Organization info
+	 * @param req.params.organization_id The organizationID for the organization to be deleted.
+	 * @param res Express Response
+	 */
+	public static async deleteOrganization(req: Request, res: Response) {
+		const valid = req.params.organization_id
+		if (!valid) {
+			const err = new RequestError(422, `Failed to delete organizations. Req parameters are invalid: ${req}`)
+			return RequestError.handle(err, req, res)
+		}
 
-	// 	Logger.info(`Fetching organization with id: ${req.params.organization_id}`)
-	// 	Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
-	// 		if (!organization) {
-	// 			throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id}`)
-	// 		}
-	// 		Logger.info(`Deleting organization with ID ${req.params.organization_id} `)
-	// 		Organization.removeById(req.params.organization_id)
-	// 	}).then(() => {
-	// 		Logger.info(`Deleted organization with ID: ${req.params.organization_id} `)
-	// 		res.status(200).json()
-	// 	}).catch((err: Error) => {
-	// 		Logger.error('Failed deleting organization.')
-	// 		RequestError.handle(err, req, res)
-	// 	})
-	// }
+		Logger.info(`Fetching organization with id: ${req.params.organization_id}`)
+		Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
+			if (!organization) {
+				throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id}`)
+			}
+			Logger.info(`Deleting organization with ID ${req.params.organization_id} `)
+			Organization.removeById(req.params.organization_id)
+		}).then(() => {
+			Logger.info(`Deleted organization with ID: ${req.params.organization_id} `)
+			res.status(200).json()
+		}).catch((err: Error) => {
+			Logger.error('Failed deleting organization.')
+			RequestError.handle(err, req, res)
+		})
+	}
 
 	public static buildOrganization(body: any): Organization {
 		const organization = Organization.create()

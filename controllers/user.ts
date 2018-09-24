@@ -151,7 +151,7 @@ export default class UserController {
 			Logger.info(`Updated User with ID ${req.params.user_id}`)
 			res.status(200).json()
 		}).catch((err: Error | RequestError) => {
-			Logger.error("Failed updating user.")
+			Logger.error('Failed updating user.')
 			RequestError.handle(err, req, res)
 		})
 	}
@@ -165,7 +165,7 @@ export default class UserController {
 	public static async deleteUser(req: Request, res: Response) {
 		const valid = req.params.user_id
 		if (!valid) {
-			const err = new RequestError(422, `Failed to delete organizations.Req parameters are invalid: ${req}`)
+			const err = new RequestError(422, `Failed to delete user. Req parameters are invalid: ${req}`)
 			return RequestError.handle(err, req, res)
 		}
 
@@ -180,13 +180,13 @@ export default class UserController {
 			Logger.info(`Deleted user with ID: ${req.params.user_id} `)
 			res.status(200).json()
 		}).catch((err: Error) => {
-			Logger.error("Failed deleting user.")
+			Logger.error('Failed deleting user.')
 			RequestError.handle(err, req, res)
 		})
 	}
 
-	static buildUser(body: any): User {
-		let user = User.create()
+	public static buildUser(body: any): User {
+		const user = User.create()
 		user.email = body.email
 		user.firstName = body.firstName
 		user.lastName = body.lastName

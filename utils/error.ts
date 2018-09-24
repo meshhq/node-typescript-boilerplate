@@ -6,7 +6,7 @@ import Logger from './logger'
 
 export default class RequestError extends Error {
 
-	public static handle (err: RequestError | Error, req: Request, res: Response) {
+	public static handle(err: RequestError | Error, req: Request, res: Response) {
 		Logger.error(err.message)
 		if (err instanceof RequestError) {
 			res.status(err.code).send(err.message)

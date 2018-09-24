@@ -9,5 +9,5 @@ export default function createOrganizationRoutes(router: Router) {
 	// router.get('/organizations', OrganizationController.getOrganizations)
 	// router.get('/organizations/:organization_id', OrganizationController.getOrganization)
 	// router.put('/organizations/:organization_id', OrganizationController.updateOrganization)
-	// router.delete('/organizations/:organization_id', OrganizationController.deleteOrganization)
+	router.delete('/organizations/:organization_id', OrganizationController.deleteOrganization)
 }
