@@ -48,4 +48,33 @@ describe.only('OrganizationController', function () {
 			})
 		})
 	})
+
+	describe('DELETE /organizations', function () {
+		it('should return 404 status if organization id cannot be found', function (done) {
+			const invalidID = 999999999
+			Agent.del(`/organizations/${invalidID}`).end(function (err: Error, res) {
+				expect(err).to.exist
+				expect(res).to.have.status(404)
+				done()
+			})
+		})
+
+		it('should return 404 status if organization id cannot be found', function (done) {
+			const stringID = 'hello'
+			Agent.del(`/organizations/${stringID}`).end(function (err: Error, res) {
+				expect(err).to.exist
+				expect(res).to.have.status(500)
+				done()
+			})
+		})
+
+		it('should successfully delete organization with valid id and return a 200 status', function (done) {
+			CreateOrganization().then((org: Organization) => {
+				Agent.del(`/organizations/${org.id}`).end(function (err: Error, res) {
+					expect(res).to.have.status(200)
+					done()
+				})
+			})
+		})
+	})
 })

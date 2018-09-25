@@ -10,7 +10,7 @@ import RequestError from '../utils/error'
 import Validator from '../utils/validator'
 
 // Acceptable Body Params
-const bodyParams = ['name', 'firstName', 'lastName']
+const bodyParams = ['name']
 const validator = new Validator(bodyParams)
 
 export default class OrganizationController {
