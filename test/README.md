@@ -2,6 +2,7 @@ If you encounter an error while running tests like:
 ```
   "before all" hook
   0 passing (2s)
+  ... (some timeout Error)
   1 failing
 ```
 check `ormconfig` to confirm which DB is being used
