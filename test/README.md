@@ -1,4 +1,4 @@
-If you encounter an error while running tests like this: 
+If you encounter an error while running tests like: 
 ```
   "before all" hook
   0 passing (2s)
