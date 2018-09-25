@@ -86,35 +86,29 @@ export default class OrganizationController {
 		})
 	}
 
-	// /**
-	//  * Updates an Organization with the supplied information.
-	//  * @param req Express Request
-	//  * @param req.params.organization_id The organizationID for the organization to be updated.
-	//  * @param req.body The paylod containg update information for the organization.
-	//  * @param res Express Response
-	//  */
-	// public static async updateOrganization(req: Request, res: Response) {
-	// 	const valid = req.params.organization_id && validator.ValidateRequest(req)
-	// 	if (!valid) {
-	// 		const err = new RequestError(422, `Failed to update organization.Req parameters are invalid: ${ req } `)
-	// 		return RequestError.handle(err, req, res)
-	// 	}
-
-	// 	Logger.info(`Fetching organization with id: ${ req.params.organization_id } `)
-	// 	Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
-	// 		if (!organization) {
-	// 			throw new RequestError(404, `Failed to find organization with id: ${ req.params.organization_id } `)
-	// 		}
-	// 		Logger.info(`Updating organization with ID ${ req.params.organization_id } `)
-	// 		Organization.updateById(req.params.organization_id, req.body)
-	// 	}).then(() => {
-	// 		Logger.info(`Updated Organization with ID ${ req.params.organization_id } `)
-	// 		res.status(200).json()
-	// 	}).catch((err: Error | RequestError) => {
-	// 		Logger.error('Failed updating organization.')
-	// 		RequestError.handle(err, req, res)
-	// 	})
-	// }
+	/**
+	 * Updates an Organization with the supplied information.
+	 * @param req Express Request
+	 * @param req.params.organization_id The organizationID for the organization to be updated.
+	 * @param req.body The paylod containg update information for the organization.
+	 * @param res Express Response
+	 */
+	public static async updateOrganization(req: Request, res: Response) {
+		const valid = req.params.organization_id && validator.ValidateRequest(req)
+		if (!valid) {
+			const err = new RequestError(422, `Failed to update organization.Req parameters are invalid: ${req} `)
+			return RequestError.handle(err, req, res)
+		}
+		Logger.info(`Updating organization with ID ${req.params.organization_id} `)
+		Organization.updateById(req.params.organization_id, req.body)
+			.then(() => {
+				Logger.info(`Updated Organization with ID ${req.params.organization_id} `)
+				res.status(200).json()
+			}).catch((err: Error | RequestError) => {
+				Logger.error('Failed updating organization.')
+				RequestError.handle(err, req, res)
+			})
+	}
 
 	/**
 	 * Get a single Organization the authorized organization belongs to

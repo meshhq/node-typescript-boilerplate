@@ -62,7 +62,7 @@ describe.only('OrganizationController', function () {
 	})
 
 	describe('GET /organizations/:organization_id', function () {
-		it.only('should return 404 status if organization not found', function (done) {
+		it('should return 404 status if organization not found', function (done) {
 			Agent.get(`/organizations/1234567`).end(function (err: Error, res) {
 				expect(err).to.exist
 				expect(res).to.have.status(404)
@@ -73,6 +73,28 @@ describe.only('OrganizationController', function () {
 		it('should successfully return the organization payload corresponding to supplied id', function (done) {
 			CreateOrganization().then((org: Organization) => {
 				Agent.get(`/organizations/${org.id}`).end(function (err: Error, res) {
+					expect(res).to.have.status(200)
+					done(err)
+				})
+			})
+		})
+	})
+
+	describe('PUT /organizations/:organization_id', function () {
+		it('should return 422 status for invalid payload', function (done) {
+			CreateOrganization().then((organization: Organization) => {
+				Agent.put(`/organizations/${organization.id}`).send({}).end(function (err: Error, res) {
+					expect(err).to.exist
+					expect(res).to.have.status(422)
+					done()
+				})
+			})
+		})
+
+		it('should return organization', function (done) {
+			CreateOrganization().then((organization: Organization) => {
+				const newName = { name: 'newName' }
+				Agent.put(`/organizations/${organization.id}`).send(newName).end(function (err: Error, res) {
 					expect(res).to.have.status(200)
 					done(err)
 				})
@@ -93,7 +115,7 @@ describe.only('OrganizationController', function () {
 		it('should return 422 status if organization id cannot be found', function (done) {
 			Agent.del(`/organizations`).end(function (err: Error, res) {
 				expect(err).to.exist
-				expect(res).to.have.status(422)
+				expect(res).to.have.status(404)
 				done()
 			})
 		})
