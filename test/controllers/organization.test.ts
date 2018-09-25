@@ -50,11 +50,30 @@ describe.only('OrganizationController', function () {
 	})
 
 	describe('GET /organizations', function () {
-		it('should successfully return the created organization payload', function (done) {
+		it('should successfully return the organizations payload', function (done) {
 			CreateOrganization().then((org: Organization) => {
 				Agent.get('/organizations').send(org).end(function (err: Error, res) {
 					expect(res).to.have.status(200)
-					expect(res.body.length).to.eq(1)
+					expect(res.body.length).to.eq(3)
+					done(err)
+				})
+			})
+		})
+	})
+
+	describe('GET /organizations/:organization_id', function () {
+		it.only('should return 404 status if organization not found', function (done) {
+			Agent.get(`/organizations/1234567`).end(function (err: Error, res) {
+				expect(err).to.exist
+				expect(res).to.have.status(404)
+				done()
+			})
+		})
+
+		it('should successfully return the organization payload corresponding to supplied id', function (done) {
+			CreateOrganization().then((org: Organization) => {
+				Agent.get(`/organizations/${org.id}`).end(function (err: Error, res) {
+					expect(res).to.have.status(200)
 					done(err)
 				})
 			})
@@ -71,7 +90,7 @@ describe.only('OrganizationController', function () {
 			})
 		})
 
-		it('should return 500 status if organization id cannot be found', function (done) {
+		it('should return 422 status if organization id cannot be found', function (done) {
 			Agent.del(`/organizations`).end(function (err: Error, res) {
 				expect(err).to.exist
 				expect(res).to.have.status(422)

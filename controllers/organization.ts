@@ -74,12 +74,6 @@ export default class OrganizationController {
 	 * @param res Express Response
 	 */
 	public static getOrganization(req: Request, res: Response) {
-		const valid = validator.ValidateRequest(req)
-		if (!valid) {
-			const err = new RequestError(422, `Failed to find organization.Req parameters are invalid: ${req}`)
-			return RequestError.handle(err, req, res)
-		}
-
 		Logger.info(`Fetching organization with id: ${req.params.organization_id} `)
 		Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
 			if (!organization) {
@@ -140,7 +134,6 @@ export default class OrganizationController {
 			Logger.info(`Deleted organization with ID: ${req.params.organization_id} `)
 			res.status(200).json()
 		}).catch((err: Error) => {
-			console.log(err)
 			Logger.error('Failed deleting organization.')
 			RequestError.handle(err, req, res)
 		})
