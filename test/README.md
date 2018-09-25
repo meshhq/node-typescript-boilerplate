@@ -6,7 +6,7 @@ If you encounter an error while running tests like:
 ```
 check `ormconfig` to confirm which DB is being used
 If postgres, get rid of: 
-`await Redis.flushRedis()` from `before(async function()` in `config.test.ts` file
+`await Redis.flushRedis()` from `before(async function()` in `config.test.ts` file if not using Redis.
 
 #### General postgres tips:
 
