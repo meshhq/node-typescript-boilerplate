@@ -46,55 +46,51 @@ export default class OrganizationController {
 		})
 	}
 
-	// /**
-	//  * Gets all Organizations for a organization constrained by the supplied query parameters.
-	//  * @param req Express Request
-	//  * @param req.query The query values to be used in the query.
-	//  * @param res Express Response
-	//  */
-	// public static getOrganizations(req: Request, res: Response) {
-	// 	const valid = validator.ValidateRequest(req)
-	// 	if (!valid) {
-	// 		const err = new RequestError(422, `Failed to find organizations. Req parameters are invalid: ${req}`)
-	// 		return RequestError.handle(err, req, res)
-	// 	}
+	/**
+	 * Gets all Organizations for a organization constrained by the supplied query parameters.
+	 * @param req Express Request
+	 * @param req.query The query values to be used in the query.
+	 * @param res Express Response
+	 */
+	public static getOrganizations(req: Request, res: Response) {
+		const valid = validator.ValidateRequest(req)
+		if (!valid) {
+			const err = new RequestError(422, `Failed to find organizations.`)
+			return RequestError.handle(err, req, res)
+		}
+		Logger.info('Find all Organizations: ')
+		Organization.find({}).then((organizations: Organization[]) => {
+			Logger.info(`Found organizations: ${organizations}`)
+			res.status(200).json(organizations)
+		}).catch((err: Error) => {
+			RequestError.handle(err, req, res)
+		})
+	}
 
-	// 	Logger.info('Find all Organizations for Organization: ', req.organization.githubHandle)
-	// 	Organization.find({ where: req.query }).then((organizations: Organization[]) => {
-	// 		if (organizations.length === 0) {
-	// 			throw new RequestError(404, `Failed to find organizations for query: ${req.query}`)
-	// 		}
-	// 		Logger.info(`Found organizations: ${organizations} for query: ${req.query} `)
-	// 		res.status(200).json(organizations)
-	// 	}).catch((err: Error) => {
-	// 		RequestError.handle(err, req, res)
-	// 	})
-	// }
+	/**
+	 * Gets all Organization for a organization constrained by the supplied query parameters.
+	 * @param req Express Request
+	 * @param req.params.organization_id The organizationID for the organization to be fetched.
+	 * @param res Express Response
+	 */
+	public static getOrganization(req: Request, res: Response) {
+		const valid = validator.ValidateRequest(req)
+		if (!valid) {
+			const err = new RequestError(422, `Failed to find organization.Req parameters are invalid: ${req}`)
+			return RequestError.handle(err, req, res)
+		}
 
-	// /**
-	//  * Gets all Organization for a organization constrained by the supplied query parameters.
-	//  * @param req Express Request
-	//  * @param req.params.organization_id The organizationID for the organization to be fetched.
-	//  * @param res Express Response
-	//  */
-	// public static getOrganization(req: Request, res: Response) {
-	// 	const valid = validator.ValidateRequest(req)
-	// 	if (!valid) {
-	// 		const err = new RequestError(422, `Failed to find organization. Req parameters are invalid: ${req}`)
-	// 		return RequestError.handle(err, req, res)
-	// 	}
-
-	// 	Logger.info(`Fetching organization with id: ${req.params.organization_id}`)
-	// 	Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
-	// 		if (!organization) {
-	// 			throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id}`)
-	// 		}
-	// 		Logger.info(`Found organization: ${organization}`)
-	// 		res.status(200).json(organization)
-	// 	}).catch((err: Error) => {
-	// 		RequestError.handle(err, req, res)
-	// 	})
-	// }
+		Logger.info(`Fetching organization with id: ${req.params.organization_id} `)
+		Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
+			if (!organization) {
+				throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id} `)
+			}
+			Logger.info(`Found organization: ${organization} `)
+			res.status(200).json(organization)
+		}).catch((err: Error) => {
+			RequestError.handle(err, req, res)
+		})
+	}
 
 	// /**
 	//  * Updates an Organization with the supplied information.
@@ -106,19 +102,19 @@ export default class OrganizationController {
 	// public static async updateOrganization(req: Request, res: Response) {
 	// 	const valid = req.params.organization_id && validator.ValidateRequest(req)
 	// 	if (!valid) {
-	// 		const err = new RequestError(422, `Failed to update organization. Req parameters are invalid: ${req}`)
+	// 		const err = new RequestError(422, `Failed to update organization.Req parameters are invalid: ${ req } `)
 	// 		return RequestError.handle(err, req, res)
 	// 	}
 
-	// 	Logger.info(`Fetching organization with id: ${req.params.organization_id}`)
+	// 	Logger.info(`Fetching organization with id: ${ req.params.organization_id } `)
 	// 	Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
 	// 		if (!organization) {
-	// 			throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id}`)
+	// 			throw new RequestError(404, `Failed to find organization with id: ${ req.params.organization_id } `)
 	// 		}
-	// 		Logger.info(`Updating organization with ID ${req.params.organization_id}`)
+	// 		Logger.info(`Updating organization with ID ${ req.params.organization_id } `)
 	// 		Organization.updateById(req.params.organization_id, req.body)
 	// 	}).then(() => {
-	// 		Logger.info(`Updated Organization with ID ${req.params.organization_id}`)
+	// 		Logger.info(`Updated Organization with ID ${ req.params.organization_id } `)
 	// 		res.status(200).json()
 	// 	}).catch((err: Error | RequestError) => {
 	// 		Logger.error('Failed updating organization.')
@@ -133,16 +129,10 @@ export default class OrganizationController {
 	 * @param res Express Response
 	 */
 	public static async deleteOrganization(req: Request, res: Response) {
-		const valid = req.params.organization_id
-		if (!valid) {
-			const err = new RequestError(422, `Failed to delete organizations. Req parameters are invalid: ${req}`)
-			return RequestError.handle(err, req, res)
-		}
-
-		Logger.info(`Fetching organization with id: ${req.params.organization_id}`)
+		Logger.info(`Fetching organization with id: ${req.params.organization_id} `)
 		Organization.findOneById(req.params.organization_id).then((organization: Organization) => {
 			if (!organization) {
-				throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id}`)
+				throw new RequestError(404, `Failed to find organization with id: ${req.params.organization_id} `)
 			}
 			Logger.info(`Deleting organization with ID ${req.params.organization_id} `)
 			Organization.removeById(req.params.organization_id)
@@ -150,6 +140,7 @@ export default class OrganizationController {
 			Logger.info(`Deleted organization with ID: ${req.params.organization_id} `)
 			res.status(200).json()
 		}).catch((err: Error) => {
+			console.log(err)
 			Logger.error('Failed deleting organization.')
 			RequestError.handle(err, req, res)
 		})

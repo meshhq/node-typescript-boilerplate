@@ -49,6 +49,18 @@ describe.only('OrganizationController', function () {
 		})
 	})
 
+	describe('GET /organizations', function () {
+		it('should successfully return the created organization payload', function (done) {
+			CreateOrganization().then((org: Organization) => {
+				Agent.get('/organizations').send(org).end(function (err: Error, res) {
+					expect(res).to.have.status(200)
+					expect(res.body.length).to.eq(1)
+					done(err)
+				})
+			})
+		})
+	})
+
 	describe('DELETE /organizations', function () {
 		it('should return 404 status if organization id cannot be found', function (done) {
 			const invalidID = 999999999
@@ -59,11 +71,10 @@ describe.only('OrganizationController', function () {
 			})
 		})
 
-		it('should return 404 status if organization id cannot be found', function (done) {
-			const stringID = 'hello'
-			Agent.del(`/organizations/${stringID}`).end(function (err: Error, res) {
+		it('should return 500 status if organization id cannot be found', function (done) {
+			Agent.del(`/organizations`).end(function (err: Error, res) {
 				expect(err).to.exist
-				expect(res).to.have.status(500)
+				expect(res).to.have.status(422)
 				done()
 			})
 		})
