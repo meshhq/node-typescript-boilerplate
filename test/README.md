@@ -28,4 +28,4 @@ If you encounter error :
      Error: connect ECONNREFUSED 127.0.0.1:5432
 ```
 ... you need to be running the DB in the background to establish server connection:
-`brew services start postgresql`
+`brew services start postgresql` (this assumes you have Homebrew installed)
