@@ -29,14 +29,12 @@ export const UnAuthorizedAgent = chai.request.agent(app)
 const userPass = Faker.internet.password()
 export let LoggedInUser: User
 
-import { createConnection, Connection, UseContainerOptions } from "typeorm";
-import { connect } from 'tls';
+import { createConnection, Connection, UseContainerOptions } from 'typeorm'
+import { connect } from 'tls'
 
-before(async function () {
+before(async function() {
 	const connection = await createConnection()
 	await connection.synchronize(true)
-	await Redis.flushRedis()
-
 	// Create a user and authenticate.
 	LoggedInUser = await RegisterUser(userPass)
 	const creds = { email: LoggedInUser.email, password: userPass }

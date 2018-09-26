@@ -9,12 +9,12 @@ const tslint = require('gulp-tslint')
 const del = require('del')
 const fs = require('fs')
 const path = require('path')
-const jeditor = require("gulp-json-editor");
-const jsonToYaml = require('gulp-json-to-yaml');
-const clean = require('gulp-clean');
-const rename = require("gulp-rename");
-const async = require('async');
-const DotENV = require('dotenv');
+const jeditor = require('gulp-json-editor')
+const jsonToYaml = require('gulp-json-to-yaml')
+const clean = require('gulp-clean')
+const rename = require('gulp-rename')
+const async = require('async')
+const DotENV = require('dotenv')
 
 // Setup config
 DotENV.config()
@@ -35,19 +35,19 @@ const taggedImage = `${IMAGE_NAME}:${Date.now()}`
 const filesToWatch = [
 	'./**/*.ts',
 	'./**/*.test.ts',
-	'!./node_modules/**/*.ts', 
+	'!./node_modules/**/*.ts',
 	'!./dist/**/*.ts',
-	'!./typings/**/*.ts'
+	'!./typings/**/*.ts',
 ]
 
 /**
  * Cleaning commands
  */
 const cleanDistFolder = 'clean:dist'
-gulp.task(cleanDistFolder, function () {
-  return del([
-    'dist/**/*'
-  ])
+gulp.task(cleanDistFolder, function() {
+	return del([
+		'dist/**/*',
+	])
 })
 
 /**
@@ -72,11 +72,11 @@ gulp.task(transpileTS, [cleanDistFolder], () => {
 	.pipe(plumber())
 	.pipe(cache('transpileTS'))
 	.pipe(tsProject())
-	.once("error", function () {
+	.once('error', function() {
 		if (options.indexOf('--force') === -1) {
-			this.once("finish", () => process.exit(1))
+			this.once('finish', () => process.exit(1))
 		}
-  	})
+	})
 	.js.pipe(gulp.dest('dist'))
 })
 
@@ -105,13 +105,12 @@ const buildContainer = 'buildContainer'
 gulp.task(buildContainer, [transpileTS], (cb) => {
 	return gulp.src('*.js', {read: false})
 	.pipe(shell([
-		    'eval $(docker-machine env)',
-			`docker build -t ${IMAGE_NAME} .`,
-			`docker tag ${IMAGE_NAME} ${taggedImage}`,
-			`docker push ${taggedImage}`
+		'eval $(docker-machine env)',
+		`docker build -t ${IMAGE_NAME} .`,
+		`docker tag ${IMAGE_NAME} ${taggedImage}`,
+		`docker push ${taggedImage}`,
 	]))
 })
-
 
 /**
  * Set ENV
@@ -136,9 +135,9 @@ gulp.task(setTestENV, (done) => {
 /**
  * Watcher
  */
-const watchTS = 'watchTS';
-gulp.task(watchTS, [setDevENV, transpileTS, startServer], function () {
-    return gulp.watch(filesToWatch, [transpileTS, startServer])
+const watchTS = 'watchTS'
+gulp.task(watchTS, [setDevENV, transpileTS, startServer], function() {
+	return gulp.watch(filesToWatch, [transpileTS, startServer])
 })
 
 /**
@@ -155,10 +154,10 @@ gulp.task(__flushDB, [transpileTS], (done) => {
 		// the related sequelize shared instance with the schema def
 		require(path.join(modelsDir, file))
 	})
-	
+
 	// Return the sync promise
 	db.default.SharedInstance.sync({force: true}).then(() => {
-	  done()
+		done()
 	})
 	done()
 })
@@ -167,5 +166,5 @@ gulp.task(__flushDB, [transpileTS], (done) => {
  * Gulp Tasks
  */
 gulp.task('default', [watchTS])
-gulp.on('stop', () => { process.exit(0); });
-gulp.on('err', () => { process.exit(1); });
+gulp.on('stop', () => { process.exit(0) })
+gulp.on('err', () => { process.exit(1) })

@@ -11,7 +11,7 @@ export default class Validator {
 		this.bodyParams = bodyParams
 	}
 
-	public ValidateRequest (req: Request) {
+	public ValidateRequest(req: Request) {
 		switch (req.method) {
 			case 'POST':
 				return this.validateBody(req)
@@ -25,7 +25,7 @@ export default class Validator {
 		return false
 	}
 
-	private validateBody (req: Request) {
+	private validateBody(req: Request) {
 		if (Object.keys(req.body).length === 0) {
 			return false
 		}

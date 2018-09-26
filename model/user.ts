@@ -1,7 +1,7 @@
 
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 import * as bcrypt from 'bcrypt'
-import PassportMiddleware from "../middleware/passport";
+import PassportMiddleware from '../middleware/passport'
 
 export interface UserInterface {
 	firstName: String
@@ -14,19 +14,19 @@ export interface UserInterface {
 export default class User extends BaseEntity {
 
 	@PrimaryGeneratedColumn()
-	id: number;
+	public id: number
 
 	@Column({ nullable: true })
-	firstName: String;
+	public firstName: String
 
 	@Column({ nullable: true })
-	lastName: String;
+	public lastName: String
 
 	@Column()
-	email: String;
+	public email: String
 
 	@Column()
-	password: String;
+	public password: String
 
 	public register(password: String): Promise<User> {
 		this.password = User.generateHash(password)
@@ -41,19 +41,19 @@ export default class User extends BaseEntity {
 		return User.findOne({ email: email })
 	}
 
-	//---------------------------
+	// ---------------------------
 	// Generates a password hash.
-	//---------------------------
+	// ---------------------------
 
-	public static generateHash = function (password: String): String {
-		return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
-	};
+	public static generateHash = function(password: String): String {
+		return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+	}
 
-	//-----------------------------------------------
+	// -----------------------------------------------
 	// Validates a supplied password against our hash
-	//-----------------------------------------------
+	// -----------------------------------------------
 
-	public validPassword = function (password: String): Boolean {
-		return bcrypt.compareSync(password, this.password);
-	};
+	public validPassword = function(password: String): Boolean {
+		return bcrypt.compareSync(password, this.password)
+	}
 }
