@@ -12,7 +12,7 @@ import Organization from '../../model/organization'
 
 import { NewOrganization, CreateOrganization } from '../factories/organization'
 
-describe.only('OrganizationController', function () {
+describe('OrganizationController', function () {
 	this.timeout(10000)
 
 	// ------------------------------------------------------------------------
