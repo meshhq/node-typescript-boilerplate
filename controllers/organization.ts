@@ -1,3 +1,6 @@
+// tslint:disable-next-line:quotemark
+// tslint:disable-next-line:object-literal-key-quotes
+
 // External Dependencies
 import { Request, Response } from 'express'
 
@@ -103,8 +106,13 @@ export default class OrganizationController {
 		Organization.updateById(req.params.organization_id, req.body)
 			.then(() => {
 				Logger.info(`Updated Organization with ID ${req.params.organization_id} `)
-				res.status(200).json()
-			}).catch((err: Error | RequestError) => {
+				return Organization.findOneById(req.params.organization_id)
+			}).then((organization: any) => {
+				// tslint:disable-next-line:no-console
+				console.log('UPDATED ORG : ', organization)
+				res.status(200).json(organization)
+			})
+			.catch((err: Error | RequestError) => {
 				Logger.error('Failed updating organization.')
 				RequestError.handle(err, req, res)
 			})
@@ -126,7 +134,7 @@ export default class OrganizationController {
 			Organization.removeById(req.params.organization_id)
 		}).then(() => {
 			Logger.info(`Deleted organization with ID: ${req.params.organization_id} `)
-			res.status(200).json()
+			res.status(200).json({})
 		}).catch((err: Error) => {
 			Logger.error('Failed deleting organization.')
 			RequestError.handle(err, req, res)
