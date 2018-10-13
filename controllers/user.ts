@@ -102,7 +102,7 @@ export default class UserController {
 	}
 
 	/**
-	 * Gets all User for a user constrained by the supplied query parameters.
+	 * Gets all Users for a user constrained by the supplied query parameters.
 	 * @param req Express Request
 	 * @param req.query The query values to be used in the query.
 	 * @param res Express Response
