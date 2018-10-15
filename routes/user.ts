@@ -18,7 +18,7 @@ export default function createUserRoutes(router: Router) {
 		res.status(201).send()
 	})
 
-	router.get('/users', UserController.getUsers)
+	router.get('/users', UserController.getListOfUsers)
 	router.post('/users', UserController.createUser)
 	router.put('/users/:user_id', UserController.updateUser)
 	router.delete('/users/:user_id', UserController.deleteUser)
