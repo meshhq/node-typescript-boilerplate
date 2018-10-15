@@ -1,5 +1,6 @@
 #Ignore transpiled code
 dist
+distTest
 
 #Cache
 .tscache

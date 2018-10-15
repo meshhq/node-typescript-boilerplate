@@ -45,7 +45,7 @@ export default class PassportMiddleware {
 	 * Overrides to allow for extension
 	 */
 	public static initialize(): Express.Handler {
-		let handler = Passport.initialize()
+		const handler = Passport.initialize()
 		return handler
 	}
 
