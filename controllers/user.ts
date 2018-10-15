@@ -127,6 +127,62 @@ export default class UserController {
 	}
 
 	/**
+	 * Gets list of Users.
+	 * @param req Express Request
+	 * @param req.query The query values to be used in the query.
+	 * @param res Express Response
+	 */
+	public static getListOfUsers(req: Request, res: Response) {
+		const valid = validator.ValidateRequest(req)
+		if (!valid) {
+			const err = new RequestError(422, `Failed to find users.`)
+			return RequestError.handle(err, req, res)
+		}
+		Logger.info('Find all Users: ')
+		User.find({}).then((users: User[]) => {
+			Logger.info(`Found users: ${users}`)
+			res.status(200).json(users)
+		}).catch((err: Error) => {
+			RequestError.handle(err, req, res)
+		})
+	}
+
+	/**
+	 * Creates a new User.
+	 * @param req Express Request
+	 * @param req.body The payload containing user information.
+	 * @param req.body.firstName The first name for the user.
+	 * @param req.body.lastName The last name for the user.
+	 * @param email User's email
+	 * @param res Express Response
+	 */
+	public static createUser = (req: Request, res: Response) => {
+		const firstName = req.body.firstName
+		const lastName = req.body.lastName
+		const email = req.body.email
+		if (!firstName || !lastName || !email) {
+			const err = new RequestError(422, `Failed to create user. All parameters are required.`)
+			return RequestError.handle(err, req, res)
+		}
+
+		// Check for a user with the supplied email.
+		Logger.info(`Checking for existing user with email: ${email} `)
+		User.findEmail(email).then((user: User) => {
+			if (user) {
+				throw new RequestError(401, `Conflict. User with email: ${email} already exists.`)
+			}
+			Logger.info(`Creating new user with email: ${req.body.email}`)
+			const newUser = UserController.buildUser(req.body)
+			return newUser.save()
+		}).then((user: User) => {
+			Logger.info(`Save User with Email ${email}`)
+			res.status(201).json(user)
+		}).catch((err: Error) => {
+			RequestError.handle(err, req, res)
+		})
+	}
+
+	/**
 	 * Updates an User with the supplied information.
 	 * @param req Express Request
 	 * @param req.params.user_id The userID for the user to be updated.

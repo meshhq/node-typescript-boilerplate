@@ -10,16 +10,16 @@ import PassportMiddleware from '../middleware/passport'
 
 export default function createUserRoutes(router: Router) {
 
-	router.post('/register', UserController.registerUser, passport.authenticate('local'), function(req, res) {
+	router.post('/register', UserController.registerUser, passport.authenticate('local'), (req, res) => {
 		res.status(201).send()
 	})
 
-	router.post('/login', passport.authenticate('local'), function(req, res) {
+	router.post('/login', passport.authenticate('local'), (req, res) => {
 		res.status(201).send()
 	})
 
 	router.get('/users', UserController.getUsers)
-	router.get('/users', UserController.createUser)
+	router.post('/users', UserController.createUser)
 	router.put('/users/:user_id', UserController.updateUser)
 	router.delete('/users/:user_id', UserController.deleteUser)
 }
