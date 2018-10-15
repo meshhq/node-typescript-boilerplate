@@ -115,7 +115,7 @@ describe('UserController', function () {
 			CreateUser().then((user: User) => {
 				Agent.get('/users').send(user).end(function (err: Error, res) {
 					expect(res).to.have.status(200)
-					expect(res.body.length).to.eq(3)
+					expect(res.body.length).to.eq(6)
 					done(err)
 				})
 			})
