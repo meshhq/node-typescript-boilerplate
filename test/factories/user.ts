@@ -14,7 +14,7 @@ const newUser = () => {
 }
 
 const createUser = () => {
-	return User.create(newUser())
+	return User.create(newUser()).save()
 }
 
 const registerUser = (password: string) => {

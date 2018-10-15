@@ -110,6 +110,18 @@ describe('UserController', function () {
 		})
 	})
 
+	describe('GET /users', function () {
+		it('should successfully return the organizations payload', function (done) {
+			CreateUser().then((user: User) => {
+				Agent.get('/users').send(user).end(function (err: Error, res) {
+					expect(res).to.have.status(200)
+					expect(res.body.length).to.eq(3)
+					done(err)
+				})
+			})
+		})
+	})
+
 	describe('PUT /users', function () {
 		it('should return 401 status for unauthorized user', function (done) {
 			UnAuthorizedAgent.put('/users/10').send({}).end(function (err: Error, res) {
