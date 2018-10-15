@@ -192,24 +192,23 @@ export default class UserController {
 	public static async updateUser(req: Request, res: Response) {
 		const valid = req.params.user_id && validator.ValidateRequest(req)
 		if (!valid) {
-			const err = new RequestError(422, `Failed to update user. Req parameters are invalid: ${req}`)
+			const err = new RequestError(422, `Failed to update user.Req parameters are invalid: ${req} `)
 			return RequestError.handle(err, req, res)
 		}
-
-		Logger.info(`Fetching user with id: ${req.params.user_id}`)
-		User.findOneById(req.params.user_id).then((user: User) => {
-			if (!user) {
-				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id}`)
-			}
-			Logger.info(`Updating user with ID ${req.params.user_id}`)
-			User.updateById(req.params.user_id, req.body)
-		}).then(() => {
-			Logger.info(`Updated User with ID ${req.params.user_id}`)
-			res.status(200).json()
-		}).catch((err: Error | RequestError) => {
-			Logger.error('Failed updating user.')
-			RequestError.handle(err, req, res)
-		})
+		Logger.info(`Updating user with ID ${req.params.user_id} `)
+		User.updateById(req.params.user_id, req.body)
+			.then(() => {
+				Logger.info(`Updated User with ID ${req.params.user_id} `)
+				return User.findOneById(req.params.user_id)
+			}).then((user: any) => {
+				// tslint:disable-next-line:no-console
+				console.log('UPDATED ORG : ', user)
+				res.status(200).json(user)
+			})
+			.catch((err: Error | RequestError) => {
+				Logger.error('Failed updating user.')
+				RequestError.handle(err, req, res)
+			})
 	}
 
 	/**
@@ -219,22 +218,16 @@ export default class UserController {
 	 * @param res Express Response
 	 */
 	public static async deleteUser(req: Request, res: Response) {
-		const valid = req.params.user_id
-		if (!valid) {
-			const err = new RequestError(422, `Failed to delete user. Req parameters are invalid: ${req}`)
-			return RequestError.handle(err, req, res)
-		}
-
-		Logger.info(`Fetching user with id: ${req.params.user_id}`)
+		Logger.info(`Fetching user with id: ${req.params.user_id} `)
 		User.findOneById(req.params.user_id).then((user: User) => {
 			if (!user) {
-				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id}`)
+				throw new RequestError(404, `Failed to find user with id: ${req.params.user_id} `)
 			}
 			Logger.info(`Deleting user with ID ${req.params.user_id} `)
 			User.removeById(req.params.user_id)
 		}).then(() => {
 			Logger.info(`Deleted user with ID: ${req.params.user_id} `)
-			res.status(200).json()
+			res.status(200).json({})
 		}).catch((err: Error) => {
 			Logger.error('Failed deleting user.')
 			RequestError.handle(err, req, res)
