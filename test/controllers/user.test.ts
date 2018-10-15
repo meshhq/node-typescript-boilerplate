@@ -122,7 +122,7 @@ describe('UserController', function () {
 		})
 	})
 
-	describe('PUT /users', function () {
+	describe.skip('PUT /users', function () {
 		it('should return 401 status for unauthorized user', function (done) {
 			UnAuthorizedAgent.put('/users/10').send({}).end(function (err: Error, res) {
 				expect(err).to.exist
