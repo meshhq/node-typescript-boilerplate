@@ -27,7 +27,7 @@ export default class User extends BaseEntity {
 	@Column()
 	public email: string
 
-	@Column()
+	@Column({ nullable: true })
 	public password: string
 
 	public register(password: string): Promise<User> {
