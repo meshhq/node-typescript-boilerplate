@@ -1,0 +1,12 @@
+Instance ID
+i-0ea0a24e52630c0cc
+	
+Public DNS (IPv4)
+ec2-52-87-228-20.compute-1.amazonaws.com
+Instance state
+running
+	
+IPv4 Public IP
+52.87.228.20
+Instance type
+t2.medium
