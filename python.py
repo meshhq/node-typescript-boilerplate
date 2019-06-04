@@ -7,3 +7,6 @@ To summarize: in order to know whether a variable x is local to a function, you 
 3. If you've found x = 5 or for x in range(3) or some other binding, then x is a local variable
 4. Otherwise x belongs to some enclosing scope (function scope, global scope, or builtins)
 
+
+
+######
