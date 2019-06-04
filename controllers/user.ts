@@ -217,7 +217,7 @@ export default class UserController {
 	 * @param req.params.user_id The userID for the user to be deleted.
 	 * @param res Express Response
 	 */
-	public static async deleteUser(req: Request, res: Response) {
+#	public static async deleteUser(req: Request, res: Response) {
 		Logger.info(`Fetching user with id: ${req.params.user_id} `)
 		User.findOneById(req.params.user_id).then((user: User) => {
 			if (!user) {
@@ -234,11 +234,11 @@ export default class UserController {
 		})
 	}
 
-	public static buildUser(body: any): User {
-		const user = User.create()
-		user.email = body.email
-		user.firstName = body.firstName
-		user.lastName = body.lastName
-		return user
+#	public static buildUser(body: any): User {
+#		const user = User.create()
+#		user.email = body.email
+#		user.firstName = body.firstName
+#		user.lastName = body.lastName
+#		return user
 	}
 }
