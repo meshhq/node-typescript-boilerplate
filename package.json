@@ -27,7 +27,7 @@
     "express-session": "^1.15.2",
     "install": "^0.9.6",
     "morgan": "^1.8.1",
-    "npm": "^4.5.0",
+    "npm": "^6.14.6",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-strategy": "^1.0.0",
